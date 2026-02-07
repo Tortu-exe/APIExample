@@ -11,8 +11,20 @@ builder.Services.AddDbContext<TestingContext>(options =>
 builder.Services.AddScoped<IEspecialidadRepository, EspecialidadRepository>();
 builder.Services.AddScoped<IMedicoRepository, MedicoRepository>();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngular",
+        policy =>
+        {
+            policy.WithOrigins("http://localhost:4200") // Angular
+                  .AllowAnyHeader()
+                  .AllowAnyMethod();
+        });
+});
 
 var app = builder.Build();
+
+app.UseCors("AllowAngular");
 
 app.MapControllers();
 
